@@ -361,3 +361,19 @@ QBCore.Functions.CreateCallback('qb-weapons:server:RemoveAttachment', function(s
         cb(false)
     end
 end)
+
+RegisterNetEvent('qb-weapons:server:ReloadWithR', function(ammoType)
+    local src = source
+    local Player = QBCore.Functions.GetPlayer(src)
+    if not Player then return end
+
+    for ammoItem, properties in pairs(Config.AmmoTypes) do
+        if properties.ammoType == ammoType then
+            local item = exports['qb-inventory']:GetItemByName(src, ammoItem)
+            if item then
+                TriggerClientEvent('qb-weapons:client:AddAmmo', src, properties.ammoType, properties.amount, item)
+                return
+            end
+        end
+    end
+end)

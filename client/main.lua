@@ -99,9 +99,9 @@ RegisterNetEvent('qb-weapons:client:AddAmmo', function(ammoType, amount, itemDat
         disableMouse = false,
         disableCombat = true,
     }, {}, {}, {}, function() -- Done
-        weapon = GetSelectedPedWeapon(ped) -- Get weapon at time of completion
+        weapon = GetSelectedPedWeapon(ped)
 
-        if QBCore.Shared.Weapons[weapon]?.ammotype ~= ammoType then
+        if QBCore.Shared.Weapons[weapon] and QBCore.Shared.Weapons[weapon].ammotype ~= ammoType then
             return QBCore.Functions.Notify(Lang:t('error.wrong_ammo'), 'error')
         end
 
@@ -120,13 +120,26 @@ RegisterNetEvent('qb-weapons:client:UseWeapon', function(weaponData, shootbool)
     local ped = PlayerPedId()
     local weaponName = tostring(weaponData.name)
     local weaponHash = joaat(weaponData.name)
+
+    -- Safecheck: garantizar que info exista siempre
+    weaponData.info = weaponData.info or {}
+
     if currentWeapon == weaponName then
         TriggerEvent('qb-weapons:client:DrawWeapon', nil)
         SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
         RemoveAllPedWeapons(ped, true)
         TriggerEvent('qb-weapons:client:SetCurrentWeapon', nil, shootbool)
         currentWeapon = nil
-    elseif weaponName == 'weapon_stickybomb' or weaponName == 'weapon_pipebomb' or weaponName == 'weapon_smokegrenade' or weaponName == 'weapon_flare' or weaponName == 'weapon_proxmine' or weaponName == 'weapon_ball' or weaponName == 'weapon_molotov' or weaponName == 'weapon_grenade' or weaponName == 'weapon_bzgas' then
+    elseif weaponName == 'weapon_stickybomb'
+        or weaponName == 'weapon_pipebomb'
+        or weaponName == 'weapon_smokegrenade'
+        or weaponName == 'weapon_flare'
+        or weaponName == 'weapon_proxmine'
+        or weaponName == 'weapon_ball'
+        or weaponName == 'weapon_molotov'
+        or weaponName == 'weapon_grenade'
+        or weaponName == 'weapon_bzgas'
+    then
         TriggerEvent('qb-weapons:client:DrawWeapon', weaponName)
         GiveWeaponToPed(ped, weaponHash, 1, false, false)
         SetPedAmmo(ped, weaponHash, 1)
@@ -144,6 +157,8 @@ RegisterNetEvent('qb-weapons:client:UseWeapon', function(weaponData, shootbool)
     else
         TriggerEvent('qb-weapons:client:DrawWeapon', weaponName)
         TriggerEvent('qb-weapons:client:SetCurrentWeapon', weaponData, shootbool)
+
+        -- FIX: verificación segura de info.ammo
         local ammo = tonumber(weaponData.info.ammo) or 0
 
         if weaponName == 'weapon_petrolcan' or weaponName == 'weapon_fireextinguisher' then
@@ -154,12 +169,14 @@ RegisterNetEvent('qb-weapons:client:UseWeapon', function(weaponData, shootbool)
         SetPedAmmo(ped, weaponHash, ammo)
         SetCurrentPedWeapon(ped, weaponHash, true)
 
+        -- FIX: verificación segura de info.attachments
         if weaponData.info.attachments then
             for _, attachment in pairs(weaponData.info.attachments) do
                 GiveWeaponComponentToPed(ped, weaponHash, joaat(attachment.component))
             end
         end
 
+        -- FIX: verificación segura de info.tint
         if weaponData.info.tint then
             SetPedWeaponTintIndex(ped, weaponHash, weaponData.info.tint)
         end

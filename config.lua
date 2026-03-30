@@ -10,7 +10,7 @@ Config.DurabilityBlockedWeapons = {
 }
 
 Config.AmmoTypes = {
-    pistol_ammo = { ammoType = 'AMMO_PISTOL', amount = 30 },
+    pistol_ammo = { ammoType = 'AMMO_PISTOL', amount = 12 },
     rifle_ammo = { ammoType = 'AMMO_RIFLE', amount = 30 },
     smg_ammo = { ammoType = 'AMMO_SMG', amount = 30 },
     shotgun_ammo = { ammoType = 'AMMO_SHOTGUN', amount = 10 },
@@ -655,3 +655,9 @@ local function getConfigWeaponAttachments()
 end
 
 exports('getConfigWeaponAttachments', getConfigWeaponAttachments)
+
+
+-- Jobs Creator integration (jobs_creator)
+RegisterNetEvent("qb-weapons:getWeaponsAttachments", function(cb)
+    cb(WeaponAttachments)
+end)

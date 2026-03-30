@@ -336,3 +336,21 @@ function CeaseFire()
         end
     end)
 end
+
+-- Recarga con tecla R
+CreateThread(function()
+    local QBCore = exports['qb-core']:GetCoreObject()
+    while true do
+        Wait(0)
+        if IsControlJustPressed(0, 45) then
+            local ped = PlayerPedId()
+            local weapon = GetSelectedPedWeapon(ped)
+            if weapon ~= `WEAPON_UNARMED` then
+                local weaponData = QBCore.Shared.Weapons[weapon]
+                if weaponData and weaponData.ammotype then
+                    TriggerServerEvent('qb-weapons:server:ReloadWithR', weaponData.ammotype)
+                end
+            end
+        end
+    end
+end)
