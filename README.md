@@ -10,6 +10,7 @@ Esta versión incluye modificaciones personalizadas aplicadas al servidor **PLGC
 ---
 
 ## Modificaciones DSCO
+**Discord:** <https://discord.gg/cheBPA2Fg3>
 
 ### 🔫 Recarga con tecla R
 Se agregó soporte para recargar el arma presionando **R** directamente, sin necesidad de asignar la munición a un slot del hotbar ni presionar su número.
